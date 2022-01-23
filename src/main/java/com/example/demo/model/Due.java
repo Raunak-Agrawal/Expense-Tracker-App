@@ -27,6 +27,10 @@ public class Due {
 
     private BigDecimal amount;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "dueStatus")
+    private DueStatus dueStatus;
+
     @JsonFormat(pattern="dd/MM/yyyy")
     private LocalDateTime repaymentDate;
 

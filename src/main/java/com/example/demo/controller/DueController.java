@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -19,8 +20,18 @@ public class DueController {
     private DueService dueService;
 
     @PostMapping("")
-    public ResponseDto createDue(@Valid @RequestBody DueRequestDTO dueRequestDTO) {
+    public ResponseDto<Due> createDue(@Valid @RequestBody DueRequestDTO dueRequestDTO) {
         Due due = dueService.save(dueRequestDTO);
         return ResponseDto.success("Due recorded success", due);
+    }
+
+    @GetMapping("")
+    public ResponseDto<List<Due>> getDuesForUser(@RequestParam Long userId) {
+        return ResponseDto.success("Successfully fetched dues", dueService.getDues(userId));
+    }
+
+    @PutMapping("/settle")
+    public ResponseDto settleAllDuesForUser(@RequestParam Long userId) {
+        return ResponseDto.success("Successfully settled all dues", dueService.settleDues(userId));
     }
 }

@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -36,7 +36,7 @@ public class ExpenseServiceImpl implements ExpenseService {
             throw new ApiValidationException("User doesn't exist");
         }
 
-        user.addExpense(expenseRequestDTO.getAmount());
+        user.addExpense(BigDecimal.valueOf(expenseRequestDTO.getAmount()));
 
         Expense newExpense = Expense.builder()
                 .user(user)
@@ -60,5 +60,19 @@ public class ExpenseServiceImpl implements ExpenseService {
         }
         expenseRepository.delete(expense); // Need to work on this to restore expense for the user when expense is deleted
         return true;
+    }
+
+    /**
+     * @param userId
+     * @return Returns expenses for the user
+     */
+    @Override
+    public List<Expense> getExpenses(Long userId) {
+        log.info("Getting expenses for user: {}", userId);
+        User user = userRepository.findById(userId).get();
+        if (user == null) {
+            throw new ApiValidationException("User not found");
+        }
+        return user.getExpenses();
     }
 }

@@ -34,12 +34,10 @@ public class User {
     // Can think of not deleting expense even though user is deleted, may be just use flag to setIsDeleted = false for future reference.
     private List<Expense> expenses = new ArrayList<>();
 
-    public void addExpense(Double amount) {
-        BigDecimal expenseAmount = BigDecimal.valueOf(amount);
-
-        if (this.getBalance().compareTo(expenseAmount) < 0) {
+    public void addExpense(BigDecimal amount) {
+        if (this.getBalance().compareTo(amount) < 0) {
             throw new ApiValidationException("Insufficient balance");
         }
-        this.setBalance(this.getBalance().subtract(expenseAmount));
+        this.setBalance(this.getBalance().subtract(amount));
     }
 }

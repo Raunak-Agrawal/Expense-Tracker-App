@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -20,7 +21,7 @@ public class ExpenseController {
     private ExpenseService expenseService;
 
     @PostMapping("")
-    public ResponseDto createExpense(@Valid @RequestBody ExpenseRequestDTO expenseRequestDTO) {
+    public ResponseDto<Expense> createExpense(@Valid @RequestBody ExpenseRequestDTO expenseRequestDTO) {
         Expense expense = expenseService.save(expenseRequestDTO);
         return ResponseDto.success("Expense recorded success", expense);
     }
@@ -29,5 +30,10 @@ public class ExpenseController {
     public ResponseDto<MessageResponse> deleteExpense(@PathVariable Long id) {
         expenseService.deleteExpense(id);
         return ResponseDto.success("Successfully deleted user");
+    }
+
+    @GetMapping("")
+    public ResponseDto<List<Expense>> getExpensesForUser(@RequestParam Long userId) {
+        return ResponseDto.success("Successfully fetched expenses", expenseService.getExpenses(userId));
     }
 }
