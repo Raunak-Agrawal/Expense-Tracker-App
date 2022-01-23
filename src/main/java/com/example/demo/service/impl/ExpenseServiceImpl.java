@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Slf4j
@@ -57,7 +58,7 @@ public class ExpenseServiceImpl implements ExpenseService {
         if (expense == null) {
             throw new ApiValidationException("Expense not found");
         }
-        expenseRepository.delete(expense);
+        expenseRepository.delete(expense); // Need to work on this to restore expense for the user when expense is deleted
         return true;
     }
 }
